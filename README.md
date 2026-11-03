@@ -110,14 +110,21 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configure AWS credentials
-Create an IAM user in AWS with read-only access to EC2 and S3
-(`AmazonEC2ReadOnlyAccess` and `AmazonS3ReadOnlyAccess` are enough),
-then run:
+- In the AWS Console, open IAM and create a new user.
+- Give it read-only permissions: `AmazonEC2ReadOnlyAccess` and `AmazonS3ReadOnlyAccess`.
+- Create an access key for that user.
+- Install the AWS CLI and run:
 
 ```bash
 aws configure
 ```
 Enter your Access Key ID, Secret Access Key, and default region.
+
+Paste the access key, secret key, and your region.
+
+> Safety tip: Never put your access keys in your code or upload them to GitHub. aws configure stores them safely on your own computer.
+
+> Why read-only? The script only looks at resources. It never deletes or changes anything, so it only needs permission to read.
 
 ### 3. Set your region (optional)
 Edit `AWS_REGION` in `config.py` if you're not using `us-east-1`.
@@ -165,6 +172,14 @@ Cloud Infrastructure Monitoring & Incident Management System
 If AWS credentials aren't configured, the AWS checks are skipped with a
 clear message instead of crashing — the local system check still runs.
 
+### What the CSV report looks like
+
+| timestamp | resource_type | resource_id | issue | severity |
+|-----------|---------------|-------------|-------|----------|
+| 2026-09-27 10:15:30 | EBS Volume | vol-0abc123 | Unattached volume (20 GB) still incurring cost | MEDIUM |
+| 2026-09-27 10:15:30 | Elastic IP | 3.90.1.2 | Allocated but not attached to any instance | LOW |
+
+
 ---
 
 ## Running the tests
@@ -198,6 +213,13 @@ tests/test_unused_resource_detector.py::test_find_unattached_ebs_volumes_handles
 14 passed in 0.31s
 ```
 
+| Test file | What it checks |
+|-----------|----------------|
+| `test_system_utils.py` | CPU/memory/disk values are read and returned correctly |
+| `test_aws_health_check.py` | Running/stopped servers are counted; unreachable buckets are flagged; missing credentials are handled |
+| `test_unused_resource_detector.py` | Unused disks, IPs, and stopped servers are found correctly |
+| `test_incident_manager.py` | Incidents are created, saved to CSV, and summarized correctly |
+
 ---
 
 ## What I learned / skills demonstrated
@@ -220,23 +242,9 @@ tests/test_unused_resource_detector.py::test_find_unattached_ebs_volumes_handles
 - Send alerts automatically via **AWS SNS** or **email** when a HIGH
   severity incident is found
 - Add **CloudWatch** metrics instead of/alongside local `psutil` checks
-- Check more services (RDS, Lambda) for unused resources
+- Check more services (RDS, Lambda, Load balancers) 
 - Turn this into a scheduled job (cron / EventBridge) that runs daily
 
 ---
 
-## How I'd explain this in an interview
 
-- **What problem does it solve?** Manually checking cloud health and
-  spotting wasted resources doesn't scale — this automates both.
-- **What does "unused resource detection" actually check?** Unattached
-  EBS volumes, unassociated Elastic IPs, and stopped EC2 instances —
-  all real things that quietly cost money on AWS.
-- **Why is the code split into separate files?** Each file has one
-  responsibility (health checks, resource detection, incident logging)
-  — easier to read, test, and extend.
-- **What happens if AWS isn't reachable?** The script catches the
-  error and skips that check with a clear message instead of crashing.
-- **How did you test this without a real AWS account?** I used
-  `unittest.mock` to fake boto3's responses in pytest, so the tests
-  check my code's logic without ever calling real AWS.
