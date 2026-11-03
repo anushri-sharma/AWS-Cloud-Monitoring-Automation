@@ -40,30 +40,27 @@ Doing this by clicking through the AWS website every day is slow and boring. So 
 
 ## How it works (architecture)
 
+```
 You run:  python main.py
               |
-
-              
+              v
    1. Check local CPU / memory / disk        (system_utils.py)
               |
-
-              
+              v  
    2. Connect to AWS using boto3
       - List EC2 servers and their state     (aws_health_check.py)
       - List S3 buckets and test access
               |
-
-              
+              v
    3. Look for unused resources              (unused_resource_detector.py)
       - Unattached disks
       - Unused IP addresses
       - Stopped servers
               |
-
-              
+              v
    4. Turn every problem into an "incident"  (incident_manager.py)
       and save them in reports/incident_log_<date>.csv
-
+```
 
 Each part of the system is its own small file with one job — this makes
 it easy to read, test, and extend (a common real-world practice called
