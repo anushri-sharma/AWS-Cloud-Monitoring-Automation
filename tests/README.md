@@ -1,4 +1,4 @@
-# Cloud Infrastructure Monitoring & Incident Management System
+# AWS Health Check 
 
 A simple Python + boto3 automation tool that checks the health of AWS
 resources (EC2, S3), finds unused resources that are quietly costing
@@ -202,7 +202,6 @@ tests/test_unused_resource_detector.py::test_find_unattached_ebs_volumes_handles
 
 ---
 
-## How I'd explain this in an interview
 
 - **What problem does it solve?** Manually checking cloud health and
   spotting wasted resources doesn't scale — this automates both.
