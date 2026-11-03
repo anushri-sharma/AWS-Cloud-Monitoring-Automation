@@ -63,10 +63,6 @@ You run:  python main.py
 ```
 **If AWS credentials are missing**, the script does not crash. It prints a message like "_EC2 check skipped_" and continues with the other checks.
 
-Each part of the system is its own small file with one job — this makes
-it easy to read, test, and extend (a common real-world practice called
-**separation of concerns**).
-
 ---
 
 ## Tech stack
@@ -99,11 +95,16 @@ cloud-infra-monitor/
 └── reports/                       # Generated incident CSV reports
 ```
 
+Each part of the system is its own small file with one job — this makes
+it easy to read, test, and extend (a common real-world practice called
+**separation of concerns**).
+
 ---
 
 ## Setup & Usage
 
 ### 1. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -112,6 +113,7 @@ pip install -r requirements.txt
 Create an IAM user in AWS with read-only access to EC2 and S3
 (`AmazonEC2ReadOnlyAccess` and `AmazonS3ReadOnlyAccess` are enough),
 then run:
+
 ```bash
 aws configure
 ```
@@ -120,7 +122,14 @@ Enter your Access Key ID, Secret Access Key, and default region.
 ### 3. Set your region (optional)
 Edit `AWS_REGION` in `config.py` if you're not using `us-east-1`.
 
+#### Settings you can change (config.py)
+AWS_REGION = "us-east-1"   # which AWS region to check
+CPU_THRESHOLD = 80         # flag if CPU is above 80%
+MEMORY_THRESHOLD = 85      # flag if memory is above 85%
+DISK_THRESHOLD = 90        # flag if disk is above 90%
+
 ### 4. Run it
+
 ```bash
 python main.py
 ```
