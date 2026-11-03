@@ -4,7 +4,7 @@ A simple Python + boto3 automation tool that checks the health of AWS
 resources (EC2, S3), finds unused resources that are quietly costing
 money, and logs any problems found as "incidents" in a report file.
 
-Built with: **Python**, **boto3((AWS's Python SDK))**, **psutil**, **Pytest**
+Built with: **Python**, **boto3(AWS's Python SDK)**, **psutil**, **Pytest**
 
 ---
 
