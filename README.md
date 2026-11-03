@@ -61,6 +61,7 @@ You run:  python main.py
    4. Turn every problem into an "incident"  (incident_manager.py)
       and save them in reports/incident_log_<date>.csv
 ```
+**If AWS credentials are missing**, the script does not crash. It prints a message like "_EC2 check skipped_" and continues with the other checks.
 
 Each part of the system is its own small file with one job — this makes
 it easy to read, test, and extend (a common real-world practice called
