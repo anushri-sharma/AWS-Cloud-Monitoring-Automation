@@ -247,4 +247,15 @@ tests/test_unused_resource_detector.py::test_find_unattached_ebs_volumes_handles
 
 ---
 
-
+- **AWS (Amazon Web Services):** Amazon's cloud. You rent computers, storage, and networking instead of buying them.
+- **EC2:** A virtual server (computer) in AWS. It can be *running* or *stopped*.
+- **S3:** Storage for files. Files live inside containers called **buckets**.
+- **EBS volume:** A virtual hard disk that you attach to an EC2 server.
+- **Elastic IP:** A fixed public IP address you reserve in AWS.
+- **IAM:** The AWS service that controls *who* can do *what*. I created an IAM user for my script so it does not use my main account.
+- **boto3:** The official Python library for talking to AWS from code.
+- **psutil:** A Python library that reads CPU, memory, and disk usage of the computer.
+- **Incident:** In this project, a problem that was detected and recorded (for example "unattached volume").
+- **Severity:** How serious the problem is: HIGH, MEDIUM, or LOW.
+- **Pytest:** A tool for writing automatic tests for Python code.
+- **Mocking:** Using fake data in tests instead of calling the real service.
