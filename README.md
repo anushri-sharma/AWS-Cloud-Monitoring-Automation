@@ -4,19 +4,18 @@ A simple Python + boto3 automation tool that checks the health of AWS
 resources (EC2, S3), finds unused resources that are quietly costing
 money, and logs any problems found as "incidents" in a report file.
 
-Built as a hands-on project to practice real tasks a **Junior Cloud
-Engineer** or **Cloud Support Engineer** does day-to-day: health checks,
-cost optimization, and basic incident tracking.
+Built with: **Python**, **boto3((AWS's Python SDK))**, **psutil**, **Pytest**
 
 ---
 
 ## Why I built this
 
-Cloud support and junior cloud roles involve a lot of repetitive checks:
-"Are our servers healthy? Is anything broken? Are we wasting money on
-resources nobody is using?" Instead of doing this manually in the AWS
-Console every time, I automated it with Python and boto3 (AWS's Python
-SDK) — the same tool used in real DevOps/Cloud teams.
+Imagine a company that uses AWS (Amazon's cloud). Over time, people create servers, disks, and IP addresses, then forget about them. Those forgotten resources still cost money every month.
+
+Also, someone needs to regularly check: "Are my servers running? Can I reach my storage buckets?"
+
+Doing this by clicking through the AWS website every day is slow and boring. So I wrote a Python script that does it automatically in a few seconds.
+
 
 ---
 
@@ -24,12 +23,15 @@ SDK) — the same tool used in real DevOps/Cloud teams.
 
 1. **Local System Health Check** — checks CPU, memory, and disk usage
    on the machine running the script (using `psutil`).
+
 2. **AWS Health Check** — checks whether EC2 instances are running/stopped
    and whether S3 buckets are reachable (using `boto3`).
+
 3. **Unused Resource Detection (Cost Optimization)** — finds:
    - EBS volumes that aren't attached to any instance (wasted storage cost)
    - Elastic IPs that are allocated but not attached to anything (wasted cost)
    - EC2 instances that are stopped but still around (candidates for cleanup)
+
 4. **Incident Logging** — turns every problem found into a simple
    "incident" record (timestamp, resource, issue, severity), prints a
    summary, and saves everything to a CSV report.
@@ -38,16 +40,26 @@ SDK) — the same tool used in real DevOps/Cloud teams.
 
 ## How it works (architecture)
 
-```mermaid
-flowchart LR
-    A[main.py] --> B[system_utils.py<br/>Local health check]
-    A --> C[aws_health_check.py<br/>EC2 + S3 health]
-    A --> D[unused_resource_detector.py<br/>Cost optimization checks]
-    B --> E[incident_manager.py]
-    C --> E
-    D --> E
-    E --> F[(reports/incident_log.csv)]
-```
+You run:  python main.py
+              |
+              v
+   1. Check local CPU / memory / disk        (system_utils.py)
+              |
+              v
+   2. Connect to AWS using boto3
+      - List EC2 servers and their state     (aws_health_check.py)
+      - List S3 buckets and test access
+              |
+              v
+   3. Look for unused resources              (unused_resource_detector.py)
+      - Unattached disks
+      - Unused IP addresses
+      - Stopped servers
+              |
+              v
+   4. Turn every problem into an "incident"  (incident_manager.py)
+      and save them in reports/incident_log_<date>.csv
+
 
 Each part of the system is its own small file with one job — this makes
 it easy to read, test, and extend (a common real-world practice called
