@@ -1,4 +1,4 @@
-# AWS Cloud Health Check & Unused Resource Detection Tool
+# AWS Cloud Health Check & Unused Resource Detection 
 
 A simple Python + boto3 automation tool that checks the health of AWS
 resources (EC2, S3), finds unused resources that are quietly costing
@@ -67,7 +67,7 @@ You run:  python main.py
 
 ## Tech stack
 
-- **Python 3**
+- **Python3**
 - **boto3** — AWS SDK for Python (talks to EC2 and S3)
 - **psutil** — reads local system metrics (CPU/memory/disk)
 - **AWS IAM** — for secure, limited-permission access to AWS
