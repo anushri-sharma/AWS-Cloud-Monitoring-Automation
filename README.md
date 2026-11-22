@@ -1,5 +1,5 @@
 # AWS Cloud Health Check & Unused Resource Detection Tool
-roo tol
+
 
 A simple Python + boto3 automation tool that checks the health of AWS
 resources (EC2, S3), finds unused resources that are quietly costing
